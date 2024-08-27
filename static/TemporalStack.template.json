@@ -1,0 +1,31 @@
+{
+ "Resources": {
+  "TemporalWSCloud9Env": {
+   "Type": "AWS::Cloud9::EnvironmentEC2",
+   "Properties": {
+    "InstanceType": "t2.micro",
+    "Description": "A Cloud9 environment for testing out temporal.io capabilities",
+    "ImageId": "amazonlinux-2-x86_64",
+    "Name": "Cloud9 Environment for temporal.io workshop",
+    "Tags": [
+     {
+      "Key": "Event",
+      "Value": "Temporal workshop"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/TemporalWSCloud9Env"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/yWLQQrCMBAA39J7um2qCN6E0LvUF5RNxLV2FzYbRUr/btXTDAzjoWv30Fan8ZVrjFOzoGiC5WIjTi4IZ9OC5sKVh5SlKKavbyGSkfDqfuNDSjzCFnp+kgrPia0P3erOb7sJNzvwHg7VPRPVWthoTjD8+QHetnAIggAAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/CDKMetadata/Default"
+   }
+  }
+ }
+}

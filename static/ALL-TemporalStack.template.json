@@ -1,0 +1,830 @@
+{
+ "Resources": {
+  "TemporalWSCloud9Env": {
+   "Type": "AWS::Cloud9::EnvironmentEC2",
+   "Properties": {
+    "InstanceType": "t2.micro",
+    "Description": "A Cloud9 environment for testing out temporal.io capabilities",
+    "ImageId": "amazonlinux-2-x86_64",
+    "Name": "Cloud9 Environment for temporal.io workshop",
+    "Tags": [
+     {
+      "Key": "Event",
+      "Value": "Temporal workshop"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/TemporalWSCloud9Env"
+   }
+  },
+  "demovpcF2DCF540": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "192.168.50.0/24",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Resource"
+   }
+  },
+  "demovpcPublicSubentSubnet1Subnet9D54A554": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "192.168.50.0/26",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public-Subent"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Public-SubentSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet1/Subnet"
+   }
+  },
+  "demovpcPublicSubentSubnet1RouteTable91CAF0D9": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Public-SubentSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet1/RouteTable"
+   }
+  },
+  "demovpcPublicSubentSubnet1RouteTableAssociationB046656F": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "demovpcPublicSubentSubnet1RouteTable91CAF0D9"
+    },
+    "SubnetId": {
+     "Ref": "demovpcPublicSubentSubnet1Subnet9D54A554"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet1/RouteTableAssociation"
+   }
+  },
+  "demovpcPublicSubentSubnet1DefaultRouteD441EE14": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "demovpcPublicSubentSubnet1RouteTable91CAF0D9"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "demovpcIGW048842AE"
+    }
+   },
+   "DependsOn": [
+    "demovpcVPCGW7D2E1CAC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet1/DefaultRoute"
+   }
+  },
+  "demovpcPublicSubentSubnet1EIPBD2741E1": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Public-SubentSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet1/EIP"
+   }
+  },
+  "demovpcPublicSubentSubnet1NATGateway89406216": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "SubnetId": {
+     "Ref": "demovpcPublicSubentSubnet1Subnet9D54A554"
+    },
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "demovpcPublicSubentSubnet1EIPBD2741E1",
+      "AllocationId"
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Public-SubentSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet1/NATGateway"
+   }
+  },
+  "demovpcPublicSubentSubnet2Subnet1ECEB9DF": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "192.168.50.64/26",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public-Subent"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Public-SubentSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet2/Subnet"
+   }
+  },
+  "demovpcPublicSubentSubnet2RouteTable859486AD": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Public-SubentSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet2/RouteTable"
+   }
+  },
+  "demovpcPublicSubentSubnet2RouteTableAssociation4812D27C": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "demovpcPublicSubentSubnet2RouteTable859486AD"
+    },
+    "SubnetId": {
+     "Ref": "demovpcPublicSubentSubnet2Subnet1ECEB9DF"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet2/RouteTableAssociation"
+   }
+  },
+  "demovpcPublicSubentSubnet2DefaultRoute41BC99C2": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "demovpcPublicSubentSubnet2RouteTable859486AD"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "demovpcIGW048842AE"
+    }
+   },
+   "DependsOn": [
+    "demovpcVPCGW7D2E1CAC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Public-SubentSubnet2/DefaultRoute"
+   }
+  },
+  "demovpcPrivateSubnetSubnet1Subnet7F486832": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      0,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "192.168.50.128/26",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private-Subnet"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Private-SubnetSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Private-SubnetSubnet1/Subnet"
+   }
+  },
+  "demovpcPrivateSubnetSubnet1RouteTableDA716B65": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Private-SubnetSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Private-SubnetSubnet1/RouteTable"
+   }
+  },
+  "demovpcPrivateSubnetSubnet1RouteTableAssociation942BFC16": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "demovpcPrivateSubnetSubnet1RouteTableDA716B65"
+    },
+    "SubnetId": {
+     "Ref": "demovpcPrivateSubnetSubnet1Subnet7F486832"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Private-SubnetSubnet1/RouteTableAssociation"
+   }
+  },
+  "demovpcPrivateSubnetSubnet1DefaultRouteDC8CEC57": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "demovpcPrivateSubnetSubnet1RouteTableDA716B65"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "demovpcPublicSubentSubnet1NATGateway89406216"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Private-SubnetSubnet1/DefaultRoute"
+   }
+  },
+  "demovpcPrivateSubnetSubnet2Subnet4FD8659B": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    },
+    "AvailabilityZone": {
+     "Fn::Select": [
+      1,
+      {
+       "Fn::GetAZs": ""
+      }
+     ]
+    },
+    "CidrBlock": "192.168.50.192/26",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Private-Subnet"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Private-SubnetSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Private-SubnetSubnet2/Subnet"
+   }
+  },
+  "demovpcPrivateSubnetSubnet2RouteTable8983B828": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc/Private-SubnetSubnet2"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Private-SubnetSubnet2/RouteTable"
+   }
+  },
+  "demovpcPrivateSubnetSubnet2RouteTableAssociationDCEDC16A": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "demovpcPrivateSubnetSubnet2RouteTable8983B828"
+    },
+    "SubnetId": {
+     "Ref": "demovpcPrivateSubnetSubnet2Subnet4FD8659B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Private-SubnetSubnet2/RouteTableAssociation"
+   }
+  },
+  "demovpcPrivateSubnetSubnet2DefaultRouteFFB48155": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "demovpcPrivateSubnetSubnet2RouteTable8983B828"
+    },
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "demovpcPublicSubentSubnet1NATGateway89406216"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/Private-SubnetSubnet2/DefaultRoute"
+   }
+  },
+  "demovpcIGW048842AE": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "TemporalStack/demovpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/IGW"
+   }
+  },
+  "demovpcVPCGW7D2E1CAC": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    },
+    "InternetGatewayId": {
+     "Ref": "demovpcIGW048842AE"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/demovpc/VPCGW"
+   }
+  },
+  "privatesubnet1ABCDFA53": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Type": "String",
+    "Value": {
+     "Ref": "demovpcPrivateSubnetSubnet1Subnet7F486832"
+    },
+    "Name": "/demo/private-subnet-1"
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/private-subnet-1/Resource"
+   }
+  },
+  "privatesubnet2260E229D": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Type": "String",
+    "Value": {
+     "Ref": "demovpcPrivateSubnetSubnet2Subnet4FD8659B"
+    },
+    "Name": "/demo/private-subnet-2"
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/private-subnet-2/Resource"
+   }
+  },
+  "PostgresInstance1SubnetGroupCAC045A5": {
+   "Type": "AWS::RDS::DBSubnetGroup",
+   "Properties": {
+    "DBSubnetGroupDescription": "Subnet group for PostgresInstance1 database",
+    "SubnetIds": [
+     {
+      "Ref": "demovpcPrivateSubnetSubnet1Subnet7F486832"
+     },
+     {
+      "Ref": "demovpcPrivateSubnetSubnet2Subnet4FD8659B"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/PostgresInstance1/SubnetGroup/Default"
+   }
+  },
+  "PostgresInstance1SecurityGroupFA28C3C0": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for PostgresInstance1 database",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "demovpcF2DCF540"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/PostgresInstance1/SecurityGroup/Resource"
+   }
+  },
+  "TemporalStackPostgresInstance1Secret9065E9ED3fdaad7efa858a3daf9490cf0a702aeb": {
+   "Type": "AWS::SecretsManager::Secret",
+   "Properties": {
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Generated by the CDK for stack: ",
+       {
+        "Ref": "AWS::StackName"
+       }
+      ]
+     ]
+    },
+    "GenerateSecretString": {
+     "ExcludeCharacters": " %+~`#$&*()|[]{}:;<>?!'/@\"\\",
+     "GenerateStringKey": "password",
+     "PasswordLength": 30,
+     "SecretStringTemplate": "{\"username\":\"postgres\"}"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/PostgresInstance1/Secret/Resource"
+   }
+  },
+  "PostgresInstance1SecretAttachmentBA0D257D": {
+   "Type": "AWS::SecretsManager::SecretTargetAttachment",
+   "Properties": {
+    "SecretId": {
+     "Ref": "TemporalStackPostgresInstance1Secret9065E9ED3fdaad7efa858a3daf9490cf0a702aeb"
+    },
+    "TargetId": {
+     "Ref": "PostgresInstance16DE4286E"
+    },
+    "TargetType": "AWS::RDS::DBInstance"
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/PostgresInstance1/Secret/Attachment/Resource"
+   }
+  },
+  "PostgresInstance16DE4286E": {
+   "Type": "AWS::RDS::DBInstance",
+   "Properties": {
+    "AllocatedStorage": "100",
+    "CopyTagsToSnapshot": true,
+    "DBInstanceClass": "db.m5.large",
+    "DBSubnetGroupName": {
+     "Ref": "PostgresInstance1SubnetGroupCAC045A5"
+    },
+    "Engine": "postgres",
+    "MasterUsername": "postgres",
+    "MasterUserPassword": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "TemporalStackPostgresInstance1Secret9065E9ED3fdaad7efa858a3daf9490cf0a702aeb"
+       },
+       ":SecretString:password::}}"
+      ]
+     ]
+    },
+    "StorageType": "gp2",
+    "VPCSecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "PostgresInstance1SecurityGroupFA28C3C0",
+       "GroupId"
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Snapshot",
+   "DeletionPolicy": "Snapshot",
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/PostgresInstance1/Resource"
+   }
+  },
+  "AMPWorkspace": {
+   "Type": "AWS::APS::Workspace",
+   "Properties": {
+    "Alias": "temporal",
+    "LoggingConfiguration": {
+     "LogGroupArn": "arn:aws:logs:us-east-1:764551143200:log-group:temporal:*"
+    },
+    "Tags": [
+     {
+      "Key": "Event",
+      "Value": "Temporal workshop"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/AMPWorkspace"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11RTW/CMAz9LdxD+Ng0abdBQYjLVgFiZzf1IIMmleOAUNX/voSOtuJk5/nl+dmeyOn4VY4HH3B1Q5WfRpWyhLLaMqiT2KCznhSK5Md8eS49i8Qax+QVR6xfD4Vcs7amFlGrUmfr83cZKktz0WRNgYaXyVSgmspqX6r4aZ8mIvXZWautzwzeRbtsYz3jDrIzdniHzZyzSkNs2ZJjslynMXwCr4DxCjeRkr6EtBNeG0YK+YPQOPl/zTjMfoxuxRaVJ823FVlf3j30gVo4V8RVkTaHFAgKDLKR1j5qQbmT1QIYMnC4DrsDE/bVWGllF/M+8GCHZtT4XcwfP0PPO+oKMHBAklXjKhKbsAM6IPeGaAnPlXCo0sUDfVs6uRKCei3SGx+tGb3IyUS+DX6d1kPyhnWBctPEP66MiygzAgAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "TemporalStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "Postgresendpointaddress": {
+   "Value": {
+    "Fn::GetAtt": [
+     "PostgresInstance16DE4286E",
+     "Endpoint.Address"
+    ]
+   }
+  },
+  "Postgresendpointport": {
+   "Value": {
+    "Fn::GetAtt": [
+     "PostgresInstance16DE4286E",
+     "Endpoint.Port"
+    ]
+   }
+  },
+  "loggrouparn": {
+   "Value": "arn:aws:logs:us-east-1:764551143200:log-group:temporal:*"
+  },
+  "prometheusendpoint": {
+   "Value": {
+    "Fn::GetAtt": [
+     "AMPWorkspace",
+     "PrometheusEndpoint"
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

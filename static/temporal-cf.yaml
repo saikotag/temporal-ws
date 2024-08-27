@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Cloud9 for Workshop Studio
+Resources:
+  Cloud9Environment:
+    Type: AWS::Cloud9::EnvironmentEC2
+    Properties:
+      AutomaticStopTimeMinutes: 30
+      Description: AWS Cloud9 is a cloud-based IDE that lets you write, run, and debug your code with just a browser.
+      ImageId: amazonlinux-2-x86_64
+      InstanceType: t2.micro
+      OwnerArn:
+        !Join
+          - ''
+          - - 'arn:aws:iam::'
+            - !Ref "AWS::AccountId"
+            - ':assumed-role/WSParticipantRole/Participant'
+      Name: workshop-ide
